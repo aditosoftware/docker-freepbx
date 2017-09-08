@@ -10,7 +10,8 @@ RUN apt-get update \
     libsqlite3-dev pkg-config automake libtool autoconf git unixodbc-dev uuid uuid-dev\
     libasound2-dev libogg-dev libvorbis-dev libicu-dev libcurl4-openssl-dev libical-dev libneon27-dev libsrtp0-dev\
     libspandsp-dev sudo libmyodbc subversion libtool-bin python-dev\
-    aptitude cron fail2ban net-tools vim wget
+    aptitude cron fail2ban net-tools vim wget \
+ && rm -rf /var/lib/apt/lists/*
 
 RUN pear install Console_Getopt
 
@@ -56,6 +57,8 @@ RUN sed -i 's/^upload_max_filesize = 20M/upload_max_filesize = 120M/' /etc/php5/
  && sed -i 's/^\(User\|Group\).*/\1 asterisk/' /etc/apache2/apache2.conf \
  && sed -i 's/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf
 
+COPY ./config/odbcinst.ini /etc/odbcinst.ini
+COPY ./config/odbc.ini /etc/odbc.ini
 
 RUN cd /usr/src \
  && wget http://mirror.freepbx.org/modules/packages/freepbx/freepbx-14.0-latest.tgz \
@@ -70,7 +73,6 @@ RUN cd /usr/src \
  && fwconsole ma downloadinstall announcement backup bulkhandler fax ringgroups timeconditions \
  && /etc/init.d/mysql stop \
  && rm -rf /usr/src/freepbx*
-
 
 RUN a2enmod rewrite
 
