@@ -51,7 +51,8 @@ RUN useradd -m asterisk \
  && chown -R asterisk. /usr/lib/asterisk \
  && rm -rf /var/www/html
 
-RUN sed -i 's/\(^upload_max_filesize = \).*/\120M/' /etc/php5/apache2/php.ini \
+RUN sed -i 's/^upload_max_filesize = 20M/upload_max_filesize = 120M/' /etc/php5/apache2/php.ini \
+ && sed -i 's/^memory_limit = 128M/memory_limit = 256M/' /etc/php5/apache2/php.ini \
  && cp /etc/apache2/apache2.conf /etc/apache2/apache2.conf_orig \
  && sed -i 's/^\(User\|Group\).*/\1 asterisk/' /etc/apache2/apache2.conf \
  && sed -i 's/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf
@@ -67,6 +68,7 @@ RUN cd /usr/src \
  && ./install -n \
  && fwconsole chown \
  && fwconsole ma upgradeall \
+ && fwconsole ma downloadinstall announcement backup bulkhandler fax ringgroups timeconditions \
  && /etc/init.d/mysql stop \
  && rm -rf /usr/src/freepbx*
 
