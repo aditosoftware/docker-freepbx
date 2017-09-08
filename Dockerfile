@@ -5,7 +5,7 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update \
  && apt-get upgrade -y \
  && apt-get install -y build-essential openssh-server apache2 mysql-server\
-    mysql-client MongoDB bison flex php5 php5-curl php5-cli php5-mysql php-pear php5-gd curl sox\
+    mysql-client bison flex php5 php5-curl php5-cli php5-mysql php-pear php5-gd curl sox\
     libncurses5-dev libssl-dev libmysqlclient-dev mpg123 libxml2-dev libnewt-dev sqlite3\
     libsqlite3-dev pkg-config automake libtool autoconf git unixodbc-dev uuid uuid-dev\
     libasound2-dev libogg-dev libvorbis-dev libicu-dev libcurl4-openssl-dev libical-dev libneon27-dev libsrtp0-dev\
@@ -30,7 +30,6 @@ RUN cd /usr/src \
  && tar xfz asterisk-13-current.tar.gz \
  && rm -f asterisk-13-current.tar.gz \
  && cd asterisk-* \
- && contrib/scripts/get_mp3_source.sh \
  && contrib/scripts/install_prereq install \
  && ./configure --with-pjproject-bundled \
  && make menuselect.makeopts \
