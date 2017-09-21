@@ -51,7 +51,7 @@ RUN useradd -m asterisk \
  && chown -R asterisk. /usr/lib/asterisk \
  && rm -rf /var/www/html
 
-RUN sed -i 's/^upload_max_filesize = 20M/upload_max_filesize = 120M/' /etc/php5/apache2/php.ini \
+RUN sed -i 's/^upload_max_filesize = 2M/upload_max_filesize = 120M/' /etc/php5/apache2/php.ini \
  && sed -i 's/^memory_limit = 128M/memory_limit = 256M/' /etc/php5/apache2/php.ini \
  && cp /etc/apache2/apache2.conf /etc/apache2/apache2.conf_orig \
  && sed -i 's/^\(User\|Group\).*/\1 asterisk/' /etc/apache2/apache2.conf \
@@ -76,7 +76,9 @@ RUN cd /usr/src \
 
 RUN a2enmod rewrite
 
-COPY ./start.sh /start.sh
-RUN chmod +x /start.sh
+COPY ./run /run
+RUN chmod +x /run/*
 
-CMD /start.sh
+VOLUME /backup/
+
+CMD /run/start.sh
